@@ -1,0 +1,52 @@
+<%- model_class = User -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:provider) %></th>
+      <th><%= model_class.human_attribute_name(:uid) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:image) %></th>
+      <th><%= model_class.human_attribute_name(:email) %></th>
+      <th><%= model_class.human_attribute_name(:password) %></th>
+      <% #binding.pry %>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+
+    </tr>
+  </thead>
+  <tbody>
+  <% n = 1 %>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to user.id, user_path(user) %></td>
+        <td><%= user.provider %></td>
+        <td><%= user.uid %></td>
+        <td><%= user.name %></td>
+        <td><%= image_tag(user.image) %></td>
+        <td><%= user.email %></td>
+        <td><%= user.password %></td>
+        <% #binding.pry %>
+        <% if session[:user].blank? %>
+        <% elsif session[:user]['uid'] == '110324709317704' %>
+          <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_user_path(user), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      user_path(user),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+          <%= link_to "add_friend", friendships_path(:friend_id => user), :method => :post ,
+                          :class => 'btn btn-default btn-xs'%>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_user_path,
+            :class => 'btn btn-primary' %>
