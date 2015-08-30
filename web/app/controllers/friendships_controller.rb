@@ -1,15 +1,21 @@
 class FriendshipsController < ApplicationController
 
   def create
-      # binding.pry
-    @friendship = Friendship.new(:user_id => session[:user]['id'],:friend_id => params[:friend_id])
-    if @friendship.save
-      flash[:notice] = "Added friend."
+    # binding.pry
+    if User.find_by id: session[:user]['uid']
+      flash[:notice] = "Пользователь уже есть в вашем списке друзей"
       redirect_to root_url
     else
-      flash[:notice] = "Unable to add friend."
-      redirect_to root_url
+      @friendship = Friendship.new(:user_id => session[:user]['id'],:friend_id => params[:friend_id])
+      if @friendship.save
+        flash[:notice] = "Успешно добавлен."
+        redirect_to root_url
+      else
+        flash[:notice] = "Ошибка."
+        redirect_to root_url
+      end
     end
+
   end
 
   def show

@@ -39,11 +39,23 @@
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-xs btn-danger' %>
-          <%= link_to "add_friend", friendships_path(:friend_id => user), :method => :post ,
-                          :class => 'btn btn-default btn-xs'%>
+            <% add = 0 %>
+            <% session[:friend].each do |frend| %>
+              <% if frend['id'].to_i == user.uid.to_i %>
+                <% add = 1 %>
+              <% end %>
+            <% end %>
+            <% #binding.pry %>
+            <% if add.to_i == 0 %>
+              <td>
+              <%= link_to "add_friend", friendships_path(:friend_id => user), :method => :post ,
+                            :class => 'btn btn-default btn-xs'%>
+              </td>
+            <% end %>
         <% end %>
       </tr>
     <% end %>
+                <% #binding.pry %>
   </tbody>
 </table>
 
